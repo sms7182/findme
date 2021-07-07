@@ -8,8 +8,8 @@
 
     <p>Click the button to get your coordinates.</p>
 
-    <button onclick="addUser()">Try It</button>
-    
+    <button onclick="getPositionAndSend()">GetMyPosition</button>
+    <button onclick="stopPositionDetect()">Stop</button>
     <p id="demo"></p>
 
     <script>
@@ -19,7 +19,37 @@
             Longitude: 0,
             userName: "FatalError"
         };
-        const uri = 'https://fc60571482eb.ngrok.io/api/userInfo';
+        const stop = false;
+        const uri = 'https://ccaff540398f.ngrok.io/api/userInfo';
+        function stopPositionDetect() {
+            stop = true;
+        }
+        function waitforme(ms) {
+            return new Promise(resolve => { setTimeout(resolve, ms); });
+        }
+        async function getPositionAndSend() {
+            while (stop == false) {
+                getLocation();
+                await waitforme(3000);  
+                    fetch(uri, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(item)
+                    })
+                        .then(response => response.json())
+                        .then(() => {
+
+
+                        })
+                        .catch(error => console.error('Unable to add item.', error));
+
+             
+            }
+        }
+
         function addUser() {
             getLocation();
                 fetch(uri, {
@@ -40,7 +70,21 @@
         }
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        x.innerHTML = "Latitude: " + position.coords.latitude +
+                            "<br>Longitude: " + position.coords.longitude;
+                        item.Latitude = position.coords.latitude;
+                        item.Longitude = position.coords.longitude;
+                    },
+                    function errorCallback(error) {
+                        x.innerHTML = "Geolocation is not supported by this browser.";
+                    },
+                    {
+                        timeout: 5000
+                    }
+                );
+                
             } else {
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
