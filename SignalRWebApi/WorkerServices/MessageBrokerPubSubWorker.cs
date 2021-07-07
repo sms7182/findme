@@ -22,7 +22,7 @@ namespace SignalRWebApi.WorkerServices
             {
                 await Task.Delay(1000);
                 var eventMessage = new EventMessage(Guid.NewGuid(), Guid.NewGuid().ToString(), DateTime.UtcNow);
-                await _messageBrokerHubContext.Clients.All.SendAsync("onMessageReceived",eventMessage, stoppingToken);
+               // await _messageBrokerHubContext.Clients.All.SendAsync("onMessageReceived",eventMessage, stoppingToken);
             }
         }
     }

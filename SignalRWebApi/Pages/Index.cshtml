@@ -4,12 +4,55 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Getting Started with signalr</h1>
-    <div id="messageCount" ></div>
-</div>
-<div id="messages">
+<body>
 
-</div>
-<script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
-<script src="~/js/messagebroker.js"></script>
+    <p>Click the button to get your coordinates.</p>
+
+    <button onclick="addUser()">Try It</button>
+    
+    <p id="demo"></p>
+
+    <script>
+        var x = document.getElementById("demo");
+        const item = {
+            Latitude: 0,
+            Longitude: 0,
+            userName: "FatalError"
+        };
+        const uri = 'https://fc60571482eb.ngrok.io/api/userInfo';
+        function addUser() {
+            getLocation();
+                fetch(uri, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(item)
+                })
+                    .then(response => response.json())
+                    .then(() => {
+
+
+                    })
+                    .catch(error => console.error('Unable to add item.', error));
+          
+        }
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            x.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+            item.Latitude = position.coords.latitude;
+            item.Longitude = position.coords.longitude;
+          
+        }
+       
+    </script>
+</body>
