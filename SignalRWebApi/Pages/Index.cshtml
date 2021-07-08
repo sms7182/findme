@@ -8,26 +8,38 @@
 
     <p>Click the button to get your coordinates.</p>
 
-    <button onclick="getPositionAndSend()">GetMyPosition</button>
-    <button onclick="stopPositionDetect()">Stop</button>
+    <button onclick="getPositionAndSend()" id="findMe" >FindMe</button>
+    <input type="text" id="user"/>
+    <button onclick="stopPositionDetect()" id="stop">Stop</button>
     <p id="demo"></p>
 
     <script>
         var x = document.getElementById("demo");
-        const item = {
+        let item = {
             Latitude: 0,
             Longitude: 0,
-            userName: "FatalError"
+            UserName: "none"
         };
-        const stop = false;
-        const uri = 'https://ccaff540398f.ngrok.io/api/userInfo';
+        let userName = "me";
+        let stop = false;
+        const uri = 'https://b808ffe4488a.ngrok.io/api/userInfo';
         function stopPositionDetect() {
             stop = true;
+            document.getElementById("findMe").disabled = false;
+            document.getElementById("stop").disabled = true;
         }
         function waitforme(ms) {
             return new Promise(resolve => { setTimeout(resolve, ms); });
         }
+        
         async function getPositionAndSend() {
+            stop = false;
+            userName = document.getElementById("user").value;
+            if (!stop) {
+                document.getElementById("findMe").disabled = true;
+                document.getElementById("stop").disabled = false;
+            }
+
             while (stop == false) {
                 getLocation();
                 await waitforme(3000);  
@@ -76,6 +88,7 @@
                             "<br>Longitude: " + position.coords.longitude;
                         item.Latitude = position.coords.latitude;
                         item.Longitude = position.coords.longitude;
+                        item.UserName = userName
                     },
                     function errorCallback(error) {
                         x.innerHTML = "Geolocation is not supported by this browser.";

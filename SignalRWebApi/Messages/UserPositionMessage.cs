@@ -8,11 +8,11 @@ namespace SignalRWebApi.Messages
     public class UserPositionMessage
     {
         public string UserName { get;  }
-        public decimal Longitude { get;  }
-        public decimal Latitude { get; }
+        public double Longitude { get;  }
+        public double Latitude { get; }
         public DateTime CreatedDateTime { get; }
 
-        public UserPositionMessage(string username,decimal latitud,decimal longitude)
+        public UserPositionMessage(string username,double latitud,double longitude)
         {
             CreatedDateTime = DateTime.UtcNow;
             UserName = username;
