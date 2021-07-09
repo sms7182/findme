@@ -1,0 +1,10 @@
+kind: ExternalService
+name: findmeservice
+spec:
+  image_pull_policy: Always
+  port: 80
+  source:
+    context: .
+    dll_name: SignalRWebApi.dll
+    dotnet_version: '5.0'
+    project_type: aspnetcore
